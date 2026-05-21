@@ -91,6 +91,20 @@ func (h *ReportHandler) CreateReport(c *fiber.Ctx) error {
 		})
 	}
 
+	// Validate item quantities
+	for _, item := range req.Items {
+		if item.ItemID == 0 {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "Each item must have a valid item_id",
+			})
+		}
+		if item.Quantity <= 0 {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "Each item must have a quantity greater than 0",
+			})
+		}
+	}
+
 	// Handle initial photo upload
 	initialPhoto := ""
 	file, err := c.FormFile("initial_photo")
