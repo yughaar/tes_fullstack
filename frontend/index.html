@@ -17,10 +17,11 @@
                     <div class="card shadow">
                         <div class="card-body p-4">
                             <div class="text-center mb-4">
-                                <h2 class="fw-bold text-primary">
-                                    <i class="bi bi-truck"></i> Fleetify
-                                </h2>
-                                <p class="text-muted">Fleet Maintenance System</p>
+                                <div class="login-logo">
+                                    <i class="bi bi-truck"></i>
+                                </div>
+                                <h2 class="fw-bold" style="color: var(--gray-900);">Fleetify</h2>
+                                <p class="text-muted mb-0">Fleet Maintenance System</p>
                             </div>
                             <div class="mb-3">
                                 <label for="user-select" class="form-label">Pilih User</label>
@@ -41,14 +42,14 @@
     <!-- Main App Section -->
     <div id="app-section" class="d-none">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand fw-bold" href="#">
+                <a class="navbar-brand" href="#">
                     <i class="bi bi-truck"></i> Fleetify
                 </a>
-                <div class="d-flex align-items-center">
-                    <span id="user-info" class="text-white me-3"></span>
-                    <button id="btn-logout" class="btn btn-outline-light btn-sm">
+                <div class="d-flex align-items-center gap-2">
+                    <span id="user-info"></span>
+                    <button id="btn-logout" class="btn btn-outline-secondary btn-sm">
                         <i class="bi bi-box-arrow-right"></i> Logout
                     </button>
                 </div>
@@ -75,35 +76,39 @@
         <div class="container-fluid mt-3 mb-5">
             <!-- Reports List Tab -->
             <div id="tab-content-reports" class="tab-pane-custom">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4>Riwayat Laporan Pemeliharaan</h4>
-                    <button id="btn-export-csv" class="btn btn-success btn-sm">
+                <div class="page-header">
+                    <h4><i class="bi bi-clipboard-data"></i> Riwayat Laporan Pemeliharaan</h4>
+                    <button id="btn-export-csv" class="btn btn-sm">
                         <i class="bi bi-download"></i> Export CSV
                     </button>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>No</th>
-                                <th>Nama SA</th>
-                                <th>Nomor Polisi</th>
-                                <th>Kendaraan</th>
-                                <th>Keluhan</th>
-                                <th>Status</th>
-                                <th>Tanggal</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reports-table-body">
-                        </tbody>
-                    </table>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama SA</th>
+                                    <th>Nomor Polisi</th>
+                                    <th>Kendaraan</th>
+                                    <th>Keluhan</th>
+                                    <th>Status</th>
+                                    <th>Tanggal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reports-table-body">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Create Report Tab -->
             <div id="tab-content-create" class="tab-pane-custom d-none">
-                <h4 class="mb-3">Buat Laporan Pemeliharaan Baru</h4>
+                <div class="page-header">
+                    <h4><i class="bi bi-plus-circle"></i> Buat Laporan Pemeliharaan Baru</h4>
+                </div>
                 <form id="form-create-report">
                     <div class="row">
                         <div class="col-md-6">
