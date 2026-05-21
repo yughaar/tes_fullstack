@@ -549,6 +549,21 @@ body {
     }
 }
 
+/* ==================== FILTER BAR ==================== */
+.filter-bar {
+    background: white;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+}
+
+.filter-bar .input-group-text {
+    background: var(--gray-50);
+    border-color: var(--gray-300);
+    color: var(--gray-600);
+}
+
 /* ==================== EMPTY STATE ==================== */
 .empty-state {
     text-align: center;

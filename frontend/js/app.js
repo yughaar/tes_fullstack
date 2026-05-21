@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTabs();
     initLogout();
     initExportCSV();
+    initFilters();
 });
 
 // ==================== LOGIN ====================
@@ -119,6 +120,7 @@ async function loadVehicles() {
         const response = await API.getVehicles();
         vehicles = response.data;
         populateVehicleSelect();
+        populateFilterVehicle();
     } catch (err) {
         console.error('Failed to load vehicles:', err);
     }
@@ -167,18 +169,26 @@ function renderReportsTable() {
     const tbody = document.getElementById('reports-table-body');
     clearElement(tbody);
 
-    if (reports.length === 0) {
+    const filteredReports = getFilteredReports();
+
+    // Update count
+    const countEl = document.getElementById('report-count');
+    if (countEl) {
+        countEl.textContent = filteredReports.length + ' dari ' + reports.length + ' laporan';
+    }
+
+    if (filteredReports.length === 0) {
         const tr = document.createElement('tr');
         const td = document.createElement('td');
         td.setAttribute('colspan', '8');
-        td.className = 'text-center text-muted';
-        td.textContent = 'Belum ada laporan';
+        td.className = 'text-center text-muted py-4';
+        td.textContent = reports.length === 0 ? 'Belum ada laporan' : 'Tidak ada laporan yang cocok dengan filter';
         tr.appendChild(td);
         tbody.appendChild(tr);
         return;
     }
 
-    reports.forEach((report, index) => {
+    filteredReports.forEach((report, index) => {
         const tr = document.createElement('tr');
 
         // No
@@ -666,6 +676,63 @@ async function completeReport(reportId) {
     }
 }
 
+// ==================== FILTER & SEARCH ====================
+
+function initFilters() {
+    const searchInput = document.getElementById('search-input');
+    const filterStatus = document.getElementById('filter-status');
+    const filterVehicle = document.getElementById('filter-vehicle');
+
+    searchInput.addEventListener('input', renderReportsTable);
+    filterStatus.addEventListener('change', renderReportsTable);
+    filterVehicle.addEventListener('change', renderReportsTable);
+}
+
+function populateFilterVehicle() {
+    const select = document.getElementById('filter-vehicle');
+    // Keep first option, remove rest
+    while (select.children.length > 1) {
+        select.removeChild(select.lastChild);
+    }
+    vehicles.forEach(v => {
+        const option = document.createElement('option');
+        option.value = v.id;
+        option.textContent = v.license_plate + ' - ' + v.model;
+        select.appendChild(option);
+    });
+}
+
+function getFilteredReports() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+    const statusFilter = document.getElementById('filter-status').value;
+    const vehicleFilter = document.getElementById('filter-vehicle').value;
+
+    return reports.filter(report => {
+        // Status filter
+        if (statusFilter && report.status !== statusFilter) return false;
+
+        // Vehicle filter
+        if (vehicleFilter && String(report.vehicle_id) !== vehicleFilter) return false;
+
+        // Search filter
+        if (searchTerm) {
+            const saName = report.creator ? report.creator.username.toLowerCase() : '';
+            const plate = report.vehicle ? report.vehicle.license_plate.toLowerCase() : '';
+            const model = report.vehicle ? report.vehicle.model.toLowerCase() : '';
+            const complaint = report.complaint.toLowerCase();
+
+            if (!saName.includes(searchTerm) &&
+                !plate.includes(searchTerm) &&
+                !model.includes(searchTerm) &&
+                !complaint.includes(searchTerm)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+}
+
 // ==================== EXPORT CSV (B-01) ====================
 
 function initExportCSV() {
@@ -673,7 +740,9 @@ function initExportCSV() {
 }
 
 function exportToCSV() {
-    if (reports.length === 0) {
+    const filteredReports = getFilteredReports();
+
+    if (filteredReports.length === 0) {
         showAlert('Tidak ada data untuk di-export', 'warning');
         return;
     }
@@ -683,7 +752,7 @@ function exportToCSV() {
     const rows = [headers.join(',')];
 
     // CSV Data
-    reports.forEach((report, index) => {
+    filteredReports.forEach((report, index) => {
         const row = [
             index + 1,
             escapeCSV(report.creator ? report.creator.username : '-'),
