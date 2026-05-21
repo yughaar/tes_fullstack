@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTabs();
     initLogout();
     initExportCSV();
-    initFilters();
 });
 
 // ==================== LOGIN ====================
@@ -77,6 +76,9 @@ function showApp() {
     } else {
         tabCreate.classList.add('d-none');
     }
+
+    // Init filters after app is visible
+    initFilters();
 
     // Load data
     loadVehicles();
@@ -678,14 +680,25 @@ async function completeReport(reportId) {
 
 // ==================== FILTER & SEARCH ====================
 
+let filtersInitialized = false;
+
 function initFilters() {
+    if (filtersInitialized) return;
+    filtersInitialized = true;
+
     const searchInput = document.getElementById('search-input');
     const filterStatus = document.getElementById('filter-status');
     const filterVehicle = document.getElementById('filter-vehicle');
 
-    searchInput.addEventListener('input', renderReportsTable);
-    filterStatus.addEventListener('change', renderReportsTable);
-    filterVehicle.addEventListener('change', renderReportsTable);
+    searchInput.addEventListener('input', () => {
+        renderReportsTable();
+    });
+    filterStatus.addEventListener('change', () => {
+        renderReportsTable();
+    });
+    filterVehicle.addEventListener('change', () => {
+        renderReportsTable();
+    });
 }
 
 function populateFilterVehicle() {
