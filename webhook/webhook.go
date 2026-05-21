@@ -17,8 +17,15 @@ type WebhookPayload struct {
 	Timestamp time.Time `json:"timestamp"`
 }
 
-// Notify sends an asynchronous HTTP POST to the configured webhook URL
+// Notify sends an asynchronous HTTP POST to the configured webhook URL.
 // This function is designed to be called with `go webhook.Notify(...)` (Goroutine)
+// to avoid blocking the main request handler.
+//
+// Payload format:
+//   - event: "report_status_changed"
+//   - report_id: ID of the report
+//   - status: new status (APPROVED or COMPLETED)
+//   - timestamp: time of the status change
 func Notify(status string, reportID uint, timestamp time.Time) {
 	webhookURL := os.Getenv("WEBHOOK_URL")
 	if webhookURL == "" {
