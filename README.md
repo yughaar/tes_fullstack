@@ -162,5 +162,7 @@ fleetify/
 ## 📝 Catatan
 
 - Aplikasi menggunakan auto-migration GORM + seeder Go function
-- File `init.sql` juga tersedia sebagai backup schema untuk Docker init
+- File `init.sql` dan `schema.sql` tersedia sebagai backup schema untuk Docker init
 - Upload foto disimpan di folder `frontend/uploads/`
+- Webhook berjalan secara asynchronous menggunakan Goroutine
+- Export CSV menggunakan Native JavaScript tanpa library pihak ketiga
