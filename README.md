@@ -2,7 +2,6 @@
 
 Sistem internal untuk mengelola pemeliharaan armada kendaraan. Dibangun dengan Go (GoFiber + GORM), MySQL 8.0, dan Vanilla JS + Bootstrap 5.
 
-## 🚀 Quick Start
 
 ### Menjalankan dengan Docker (Recommended)
 
@@ -12,7 +11,7 @@ git clone <repository-url>
 cd fleetify
 
 # Jalankan aplikasi
-docker-compose up --build
+docker compose up --build
 ```
 
 Aplikasi akan berjalan di: **http://localhost:3000**
