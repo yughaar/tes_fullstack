@@ -32,16 +32,14 @@ func Setup(app *fiber.App) {
 	// Master Items (accessible by all authenticated users)
 	protected.Get("/master-items", masterItemHandler.GetAllItems)
 
-	// Reports
+	// Reports - accessible by all authenticated users
 	protected.Get("/reports", reportHandler.GetAllReports)
 	protected.Get("/reports/:id", reportHandler.GetReportByID)
 
-	// SA-only routes
-	saRoutes := protected.Group("", middleware.RoleGuard("SA"))
-	saRoutes.Post("/reports", reportHandler.CreateReport)
-	saRoutes.Put("/reports/:id/complete", reportHandler.CompleteReport)
+	// SA-only routes (inline role guard)
+	protected.Post("/reports", middleware.RoleGuard("SA"), reportHandler.CreateReport)
+	protected.Put("/reports/:id/complete", middleware.RoleGuard("SA"), reportHandler.CompleteReport)
 
-	// Approval-only routes
-	approvalRoutes := protected.Group("", middleware.RoleGuard("APPROVAL"))
-	approvalRoutes.Put("/reports/:id/approve", reportHandler.ApproveReport)
+	// Approval-only routes (inline role guard)
+	protected.Put("/reports/:id/approve", middleware.RoleGuard("APPROVAL"), reportHandler.ApproveReport)
 }
